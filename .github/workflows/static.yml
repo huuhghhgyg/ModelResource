@@ -25,7 +25,7 @@ jobs:
   # Single deploy job since we're just deploying
   deploy:
     # run if it is original repository
-    if: github.repository == 'owner/repo'
+    if: github.repository_owner == 'huuhghhgyg'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
