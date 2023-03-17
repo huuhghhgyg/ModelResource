@@ -1,4 +1,6 @@
 # ModelResource
+![GitHub last commit](https://img.shields.io/github/last-commit/huuhghhgyg/ModelResource) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/huuhghhgyg/ModelResource/static.yml) ![GitHub contributors](https://img.shields.io/github/contributors/huuhghhgyg/ModelResource)
+
 模型资源库，适用于MicroCityWeb的模型导入
 
 ## 首次上传模型步骤指引
