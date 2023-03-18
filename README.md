@@ -1,7 +1,7 @@
 # ModelResource
 ![GitHub last commit](https://img.shields.io/github/last-commit/huuhghhgyg/ModelResource) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/huuhghhgyg/ModelResource/static.yml) ![GitHub contributors](https://img.shields.io/github/contributors/huuhghhgyg/ModelResource)
 
-模型资源库，适用于MicroCityWeb的模型导入
+模型资源库，适用于MicroCityWeb的模型导入。已上传的模型列表请查看本仓库的 [\models](./models) 目录
 
 ## 首次上传模型步骤指引
 上传模型到本Repository(代码仓库)应当遵循如下步骤：
