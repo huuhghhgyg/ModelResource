@@ -9,5 +9,5 @@
 示例
 
 ```
-https://huuhghhgyg.github.io/ModelResource/models/2axle.glb
+https://www.zhhuu.top/ModelResource/models/2axle.glb
 ```
