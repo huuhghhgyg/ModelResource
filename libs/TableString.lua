@@ -1,7 +1,24 @@
-function TableString(t)
+-- t: table
+-- level: 最大显示table层级。不输入时处理为math.huge，即展开所有层级
+function TableString(t, level)
     -- 非table类型直接返回
     if type(t) ~= 'table' then
         return tostring(t)
+    end
+
+    -- 检查level类型
+    if level == nil then
+        level = math.huge
+    elseif type(level) ~= "number" then
+        print(debug.traceback('TableString: level must be a number'))
+        os.exit()
+    elseif level < 0 then
+        print(debug.traceback('TableString: level must be a positive number'))
+        os.exit()
+    end
+
+    if level == 0 then
+        return '{...}'
     end
 
     -- 剩下table类型
@@ -14,7 +31,9 @@ function TableString(t)
         if type(k) == 'number' then
             -- 键值为index
             if type(v) == 'table' then
-                str = str .. TableString(v)
+                str = str .. TableString(v, level - 1)
+            elseif type(v) == 'function' then
+                str = str .. '(function)'
             else
                 str = str .. v
             end
@@ -22,7 +41,9 @@ function TableString(t)
         else
             -- 键值为key
             if type(v) == 'table' then
-                str = str .. k .. '=' .. TableString(v)
+                str = str .. k .. '=' .. TableString(v, level - 1)
+            elseif type(v) == 'function' then
+                str = str .. k .. '=' .. 'function()'
             else
                 str = str .. k .. '=' .. v
             end
@@ -43,7 +64,7 @@ end
 
 -- 示例代码
 -- local collection = {'a',{1,2},{'hi', {'Anna', 'Bell', name='AnnaBell'}},{{'x','y','z'},{1,2,3}}}
--- local collection = {a='1',b='2', 'x', 'y', 'z'}
+-- local collection = {a='1',b='2', 'x', 'y', 'z', f=function() print('hi') end}
 -- local collection = {1,2,3}
 -- print(TableString('a'))
 -- print(TableString(2))
