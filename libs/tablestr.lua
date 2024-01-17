@@ -1,6 +1,6 @@
 -- t: table
 -- level: 最大显示table层级。不输入时处理为math.huge，即展开所有层级
-function TableString(t, level)
+function tablestr(t, level)
     -- 非table类型直接返回
     if type(t) ~= 'table' then
         return tostring(t)
@@ -31,7 +31,7 @@ function TableString(t, level)
         if type(k) == 'number' then
             -- 键值为index
             if type(v) == 'table' then
-                str = str .. TableString(v, level - 1)
+                str = str .. tablestr(v, level - 1)
             elseif type(v) == 'function' then
                 str = str .. '(function)'
             else
@@ -41,7 +41,7 @@ function TableString(t, level)
         else
             -- 键值为key
             if type(v) == 'table' then
-                str = str .. k .. '=' .. TableString(v, level - 1)
+                str = str .. k .. '=' .. tablestr(v, level - 1)
             elseif type(v) == 'function' then
                 str = str .. k .. '=' .. 'function()'
             else
