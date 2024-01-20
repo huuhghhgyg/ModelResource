@@ -35,7 +35,7 @@ function tablestr(t, level)
             elseif type(v) == 'function' then
                 str = str .. '(function)'
             else
-                str = str .. v
+                str = str .. tostring(v)
             end
             indices = indices + 1
         else
@@ -45,7 +45,7 @@ function tablestr(t, level)
             elseif type(v) == 'function' then
                 str = str .. k .. '=' .. 'function()'
             else
-                str = str .. k .. '=' .. v
+                str = str .. k .. '=' .. tostring(v)
             end
             keys = keys + 1
         end
