@@ -35,13 +35,32 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: 'recursive' # update submodules
+
+      - name: Set up Git for pushing changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+  
+      - name: Pull latest changes in submodules
+        run: |
+          git submodule update --remote --merge
+          git add .
+  
+          # 获取当前时间
+          CURRENT_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  
+          # 提交子模块更新，带上当前时间
+          git commit -m "Update submodules to latest commit (merged at ${CURRENT_TIME})" || echo "No changes to commit"
+
       - name: Setup Pages
         uses: actions/configure-pages@v3
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
           path: '.'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
