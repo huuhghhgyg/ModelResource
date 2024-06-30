@@ -38,6 +38,8 @@ jobs:
 
       - name: Set up Git for pushing changes
         run: |
+          git submodule foreach git fetch
+          git submodule foreach git checkout origin/main
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
   
