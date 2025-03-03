@@ -60,3 +60,5 @@ Commit信息表单中第一个文本框为标题，通常填写新增了什么�
 ```
 https://huuhghhgyg.github.io/ModelResource/models/2axle.glb
 ```
+
+> 其中，如果 `https://huuhghhgyg.github.io/ModelResource/` 地址无响应，可以试试 `https://www.zhhuu.top/ModelResource/` 这个地址，指向我的域名，好像不能为这个repo单独修改
