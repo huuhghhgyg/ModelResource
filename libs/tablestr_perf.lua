@@ -1,16 +1,17 @@
 -- t: table
 -- level: 最大显示table层级。不输入时处理为math.huge，即展开所有层级
 function tablestr(t, level)
-    function resolve_table(t, queue)
+    local function resolve_table(t, queue)
         -- 假设table已经被取出来了
         local q = {}
 
         for k, v in pairs(t) do
-            table.insert(q, { key = k, value = v })
+            q[#q + 1] = { key = k, value = v }
         end
 
-        for i = 1, #q do
-            table.insert(queue, i, q[i])
+        -- 以栈（尾部）方式插入：为了保证弹出顺序与原先一致，这里逆序追加
+        for i = #q, 1, -1 do
+            queue[#queue + 1] = q[i]
         end
     end
 
@@ -34,14 +35,14 @@ function tablestr(t, level)
     local str = ''
 
     -- 解析队列
-    -- 把根表用大括号包起来，确保根级别也有正确的 '{' / '}' 标记
     local queue = { { key = 0, value = t } } -- {str：'{','}'；tuple:{key,value}}
     local lv_stack = 0
 
     while #queue > 0 do
-        -- queue中只有括号string和tuple table
-        if type(queue[1]) == 'string' then
-            local mark = table.remove(queue, 1) -- 标记
+        local item = table.remove(queue) -- 尾部弹出
+
+        if type(item) == 'string' then
+            local mark = item
             str = str .. mark
 
             -- 通过标记类型设置当前stack level
@@ -50,9 +51,9 @@ function tablestr(t, level)
             elseif mark == '}' then
                 lv_stack = lv_stack - 1
             end
-        elseif type(queue[1]) == 'table' then
+        elseif type(item) == 'table' then
             -- tuple table
-            local tup = table.remove(queue, 1)
+            local tup = item
             local key = tup.key
             local value = tup.value
 
@@ -65,14 +66,14 @@ function tablestr(t, level)
 
             -- 处理value
             if type(value) == 'table' then
-                -- 解析table
-                table.insert(queue, 1, '}')
+                -- 使用栈（尾部）顺序压入：先压 '}' ，然后压入子项（resolve_table 已逆序），最后压入 '{'，保证下一个弹出是 '{'
+                queue[#queue + 1] = '}'
                 if lv_stack >= level then
-                    table.insert(queue, 1, '...')
+                    queue[#queue + 1] = '...'
                 else
                     resolve_table(value, queue)
                 end
-                table.insert(queue, 1, '{')
+                queue[#queue + 1] = '{'
                 str = str .. key
             else
                 -- 解析其他容易解析的数据类型
@@ -86,10 +87,11 @@ function tablestr(t, level)
                 str = str .. key .. value
             end
         else
-            print('unexpected type:', type(key))
+            print('unexpected type:', type(item))
         end
 
-        if #queue > 1 and queue[1] ~= '{' and queue[1] ~= '}' and string.sub(str, -1) ~= '{' then
+        -- 下一个将要处理的项是栈顶：使用 #queue 和 queue[#queue] 检查
+        if #queue > 0 and queue[#queue] ~= '{' and queue[#queue] ~= '}' and string.sub(str, -1) ~= '{' then
             str = str .. ', '
         end
     end
