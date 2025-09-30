@@ -10,10 +10,10 @@ function tablestr(t, level)
     if level == nil then
         level = math.huge
     elseif type(level) ~= "number" then
-        print(debug.traceback('TableString: level must be a number'))
+        print(debug.traceback('tablestr: level must be a number'))
         os.exit()
     elseif level < 0 then
-        print(debug.traceback('TableString: level must be a positive number'))
+        print(debug.traceback('tablestr: level must be a positive number'))
         os.exit()
     end
 
@@ -33,9 +33,11 @@ function tablestr(t, level)
             if type(v) == 'table' then
                 str = str .. tablestr(v, level - 1)
             elseif type(v) == 'function' then
-                str = str .. '(function)'
+                str = str .. 'function()'
+            elseif type(v) == 'string' then
+                str = str .. "'" .. v .. "'"
             else
-                str = str .. tostring(v)
+                str = str .. v
             end
             indices = indices + 1
         else
@@ -44,8 +46,10 @@ function tablestr(t, level)
                 str = str .. k .. '=' .. tablestr(v, level - 1)
             elseif type(v) == 'function' then
                 str = str .. k .. '=' .. 'function()'
+            elseif type(v) == 'string' then
+                str = str .. k .. '=' .. "'" .. v .. "'"
             else
-                str = str .. k .. '=' .. tostring(v)
+                str = str .. k .. '=' .. v
             end
             keys = keys + 1
         end
@@ -63,11 +67,20 @@ function tablestr(t, level)
 end
 
 -- 示例代码
--- local collection = {'a',{1,2},{'hi', {'Anna', 'Bell', name='AnnaBell'}},{{'x','y','z'},{1,2,3}}}
+-- print()
+-- local collection = { 'a', { 1, 2 }, { 'hi', { 'Anna', 'Bell', name = 'AnnaBell' } }, { { 'x', 'y', 'z' }, { 1, 2, 3 } } }
 -- local collection = {a='1',b='2', 'x', 'y', 'z', f=function() print('hi') end}
 -- local collection = {1,2,3}
--- print(TableString('a'))
--- print(TableString(2))
--- print(TableString({}))
+-- local collection = { a = { x = 1 } }
+-- local collection = { a = { x = 1 }, b = { y = 2 } }
+-- local collection = {
+--     { desc = "plain brace string", t = { "}" } },
+--     { desc = "brace as value and keyed", t = { "}", a = "}" } },
+--     { desc = "ellipsis string", t = { "...", nested = { "..." } } },
+--     { desc = "mixed", t = { "{", "}", "...", a = "{", b = "}" } },
+-- }
+-- print(tablestr(collection))
 
--- print(TableString(collection))
+-- print(tablestr('a'))
+-- print(tablestr(2))
+-- print(tablestr({}))
